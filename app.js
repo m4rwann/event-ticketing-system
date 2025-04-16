@@ -5,7 +5,8 @@ const cors = require("cors");
 
 const app = express();
 
-const authRouter = require("./Routes/auth");
+const authRouter = require("./routes/auth");
+const forgotPasswordRoutes = require("./routes/forgotPassword");
 
 
 require('dotenv').config();
@@ -24,6 +25,7 @@ app.use(
 );
 
 app.use("/api/v1", authRouter);
+app.use("/api/v1", forgotPasswordRoutes);
 
 const db_name = process.env.DB_NAME;
 const db_url = `${process.env.DB_URL}/${db_name}`;

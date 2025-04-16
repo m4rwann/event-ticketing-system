@@ -1,4 +1,4 @@
-const userModel = require("../Models/userModel");
+const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const userController = {
     register: async (req, res) => {
         try {
-            const { email, password, name, role, age } = req.body;
+            const { email, password, name, role } = req.body;
 
             // Check if the user already exists
             const existingUser = await userModel.findOne({ email });
@@ -25,7 +25,6 @@ const userController = {
                 password: hashedPassword,
                 name,
                 role,
-                age,
             });
 
             // Save the user to the database

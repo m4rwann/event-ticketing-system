@@ -17,16 +17,13 @@ const userSchema = new mongoose.Schema(
             required: true,
 
         },
-        age: {
-            type: Number,
-            min: 18,
-            required: true,
-        },
         role: {
             type: String,
             enum: ["user", "organizer", "admin"],
             default: "user",
         },
+        otp: String,
+        otpExpires: Date
     },
     // schemaOptions
     {
@@ -36,4 +33,4 @@ const userSchema = new mongoose.Schema(
 );
 
 
-module.exports = mongoose.model('userModel', userSchema);
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);
