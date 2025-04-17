@@ -17,4 +17,4 @@ This is the backend server for the Online Event Ticketing System built using Nod
 - MongoDB + Mongoose
 - JWT + Bcrypt
 
-editing test 2
+editing test 1.1
