@@ -79,6 +79,73 @@ const userController = {
             res.status(500).json({ message: "Server error" });
         }
     },
+    getAllUsers: async (req, res) => {
+        try {
+            const users = await userModel.find();
+            return res.status(200).json(users);
+        } catch (e) {
+            return res.status(500).json({ message: e.message });
+        }
+    },
+    getUserProfile: async (req, res) => {
+        try {
+            const user = await userModel.findById(req.user.userId).select("-password");
+            if (!user) return res.status(404).json({ message: "User not found" });
+            return res.status(200).json(user);
+        } catch (err) {
+            return res.status(500).json({ message: "Server error", error: err.message });
+        }
+    },
+    updateUserProfile: async (req, res) => {
+        try {
+            const user = await userModel.findById(req.user.userId);
+            if (!user) return res.status(404).json({ message: "User not found" });
+            user.name = req.body.name || user.name;
+            if (req.body.password) {
+                user.password = await bcrypt.hash(req.body.password, 10);
+            }
+            const updatedUser = await user.save();
+            return res.status(200).json({ message: "Profile updated", user: updatedUser });
+        } catch (e) {
+            return res.status(500).json({ message: e.message });
+        }
+    },
+    getUserDetails: async (req, res) => {
+        try {
+            const user = await userModel.findById(req.params.id).select("-password");
+            if (!user) return res.status(404).json({ message: "User not found" });
+            return res.status(200).json(user);
+        } catch (err) {
+            return res.status(500).json({ message: "Server error", error: err.message });
+        }
+    },
+    updateUserRole: async (req, res) => {
+        try {
+            const user = await userModel.findById(req.params.id).select("-password");
+            if (!user) return res.status(404).json({ message: "User not found" });
+            const newRole = req.body.role;
+            if (!["user", "organizer", "admin"].includes(newRole)) {
+                return res.status(400).json({ message: "Invalid role value" });
+            }
+
+            user.role = newRole;
+            const updatedUser = await user.save();
+            return res.status(200).json({ message: "Role updated", updatedUser: user.role });
+        } catch (e) {
+            return res.status(500).json({ message: e.message });
+        }
+    },
+    deleteUser: async (req, res) => {
+        try {
+            const user = await userModel.findById(req.params.id);
+            if (!user) return res.status(404).json({ message: "User not found" });
+
+            await user.deleteOne();
+            return res.status(200).json({ message: "User deleted successfully" });
+        } catch (e) {
+            return res.status(500).json({ message: e.message });
+        }
+    }
 };
 
 module.exports = userController;
