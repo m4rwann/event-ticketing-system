@@ -9,6 +9,7 @@ const authRouter = require("./routes/auth");
 const forgotPasswordRoutes = require("./routes/forgotPassword");
 const userRouter = require("./routes/user");
 const eventRouter = require("./routes/event");
+const bookingRouter = require("./routes/booking");
 const authenticationMiddleware = require('./middleware/authenticationMiddleware')
 
 
@@ -32,6 +33,7 @@ app.use("/api/v1", forgotPasswordRoutes);
 app.use(authenticationMiddleware);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/events", eventRouter);
+app.use("/api/v1/bookings", bookingRouter);
 
 const db_name = process.env.DB_NAME;
 const db_url = `${process.env.DB_URL}/${db_name}`;
