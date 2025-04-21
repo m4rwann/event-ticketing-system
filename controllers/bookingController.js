@@ -68,7 +68,21 @@ const bookingController = {
         } catch (err) {
             return res.status(500).json({ message: "Server error", error: err.message });
         }
-    }
+    },
+    getUserBookings: async (req, res) => {
+        try {
+            const bookings = await Booking.find({
+                user: req.user.userId,
+                status: "confirmed",
+            })
+                .populate("event")
+                .sort({ createdAt: -1 });
+
+            return res.status(200).json({ bookings });
+        } catch (err) {
+            return res.status(500).json({ message: "Server error", error: err.message });
+        }
+    },
 };
 
 module.exports = bookingController;
